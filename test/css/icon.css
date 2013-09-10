@@ -1,0 +1,14 @@
+/*
+
+    icons
+
+*/
+
+.icon{display:inline-block;zoom:1;}
+
+.icon_switch-off{background-image:url("../slice/icon_switch-off.png");width:71px;height:29px}
+.icon_switch-on{background-image:url("../slice/icon_switch-on.png");width:71px;height:29px}
+.icon_tip-error{background-image:url("../slice/icon_tip-error.png");width:24px;height:24px}
+.icon_tip-ok{background-image:url("../slice/icon_tip-ok.png");width:24px;height:24px}
+.icon_tip-warn{background-image:url("../slice/icon_tip-warn.png");width:24px;height:24px}
+.icon_wait{background-image:url("../slice/icon_wait.png");width:14px;height:14px}
