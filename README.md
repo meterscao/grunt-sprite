@@ -120,10 +120,11 @@
 			└── publish
 				├── css/
 					└── icon.sprite.css
-				└── sprite/		
-					└── icon.png
+				└── sprite/	
+					├── icon.png
+					└── icon@2x.png
 		
-`css/icon.css` 调用`slice/`目录下的切片，`grunt-sprite` 会将 `css/icon.css` 处理。
+`css/icon.css` 调用`slice/`目录下的切片，`grunt-sprite` 会将 `css/icon.css` 进行处理。
 
 在`publish/` 目录下生成 `css/` 和 `sprite/` 两个目录，`css/` 目录下是处理完成的样式 `icon.sprite.css` ，而 `sprite/` 目录下是合并完成的雪碧图 `icon.png`。
 
