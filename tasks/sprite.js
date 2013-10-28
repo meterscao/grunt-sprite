@@ -95,7 +95,7 @@ module.exports = function (grunt) {
                         else {
                             // 生成sprite
                             grunt.file.write(destSPRITE, result.image, { encoding: 'binary' });
-                            grunt.log.writelns(("Er, " + destSPRITE + " has been created !"));
+                            grunt.log.writelns(("Done! [Created] -> " + destSPRITE));
                             var tmpResult = result.coordinates;
 
                             for (var key in tmpResult) {
@@ -112,7 +112,7 @@ module.exports = function (grunt) {
                 }
                 else {
                     grunt.file.copy(src, destCSS);
-                    grunt.log.writelns((destCSS + " has been copied !"));
+                    grunt.log.writelns(("Done! [Copied] -> " + destCSS));
                 }
             };
 
@@ -132,7 +132,7 @@ module.exports = function (grunt) {
                 }
                 // 生成新的样式
                 grunt.file.write(destCSS, datasprite);
-                grunt.log.writelns((destCSS + " has been created !"));
+                grunt.log.writelns(("Done! [Created] -> " + destCSS));
                 retinaSprite();
             };
 
@@ -187,7 +187,7 @@ module.exports = function (grunt) {
                                     if (retinaSpriteSize.width % 2 == 1 || retinaSpriteSize.height % 2 == 1) {
                                         grunt.fail.fatal("警告：所有的雪碧图icon尺寸必须是偶数的！请检查！");
                                     }
-                                    grunt.log.writelns(("Er, " + spritedest + " has been created !"));
+                                    grunt.log.writelns(("Done! [Created] -> " + spritedest));
                                     var tmpResult = result.coordinates;
                                     //                                console.log(tmpResult);
                                     for (var key in tmpResult) {
@@ -234,7 +234,7 @@ module.exports = function (grunt) {
                 retinaCssCode += '\n}';
                 sourcedata += retinaCssCode;
                 grunt.file.write(destCSS, sourcedata);
-                grunt.log.writelns((destCSS + " retina version has been created !"));
+                grunt.log.writelns(("Done! [Retina 2x] -> " + destCSS));
             };
 
             getSliceList();
