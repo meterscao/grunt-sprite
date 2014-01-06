@@ -9,16 +9,19 @@ module.exports = function (grunt) {
     "use strict";
 
     // Export the SpriteMaker function
-    grunt.registerMultiTask('sprite', 'Create sprites and updates css.', function () {
+    grunt.registerMultiTask('sprite', 'Create sprite image with slices and update the CSS file.', function () {
 
         var that = this,
             done = this.async(),
             log = console.log;
 
         var options = this.options({
-            'imagestamp':true,
-            'cssstamp':true
+            'imagestamp':false,
+            'cssstamp':false,
+            'newsprite':false
         });
+
+        var hasDelete = false;
 
 
         var _spriteSmithWrapper = function (file, callback) {
@@ -26,14 +29,20 @@ module.exports = function (grunt) {
             var src = file.src[0],
                 destDir = file.orig.dest,
                 dest = file.dest,
+                timeNow = grunt.template.today("yyyymmddHHmmss"),
                 regex = new RegExp('\\/?([^.\\/]*)\\..*', 'ig'),
                 fileNameList = src.match(regex),
                 fileName = fileNameList[0].replace(regex, '$1'),
-                destCSS = destDir +"css/" + fileName + file.orig.ext,
-                destSPRITE = destDir +"sprite/" + fileName + ".png";
+                destCSS = destDir + "css/" + fileName + file.orig.ext,
+                destSPRITE = destDir + "sprite/" + fileName + ".png";
 
-                var cssSrc=path.dirname(src);
-                var rootPath = path.dirname(cssSrc).toString();
+            if (options.newsprite) {
+                fileName = fileName + "-" + timeNow;
+                destSPRITE = destDir + "sprite/" + fileName + ".png";
+            }
+
+            var cssSrc=path.dirname(src);
+            var rootPath = path.dirname(cssSrc).toString();
 
 
 
@@ -76,9 +85,12 @@ module.exports = function (grunt) {
 
                 var imglist =   sliceImgUrlList;
 
+
+
+
                 if(rootPath !=".") for(var i =0 ; i< imglist.length ;i++)
                 {
-                   imglist[i] =   rootPath + '/' + imglist[i];
+                    imglist[i] =   rootPath + '/' + imglist[i];
                 }
 
                 config.src = imglist;
@@ -125,7 +137,7 @@ module.exports = function (grunt) {
                 for (var key in sliceCode) {
                     img = sliceCode[ key ];
                     var code ='background-image: url("../sprite/' + fileName + '.png';
-                    if(options.imagestamp) code+="?"+grunt.template.today("yyyymmddHHmmss");
+                    if(options.imagestamp) code+="?"+timeNow;
                     code+= '");';
                     code+=' background-position: -' + img.x + 'px -' + img.y + 'px;';
                     datasprite = datasprite.replace(img.sprite,code);
@@ -212,7 +224,7 @@ module.exports = function (grunt) {
             var addCssStamp = function(){
                 var sourcedataurl = destCSS;
                 var sourcedata = grunt.file.read(sourcedataurl);
-                if(options.cssstamp) sourcedata+='.TmTStamp{content:"'+ grunt.template.today("yyyymmddHHmmss") +'"}';
+                if(options.cssstamp) sourcedata+='.TmTStamp{content:"'+ timeNow +'"}';
                 grunt.file.write(destCSS, sourcedata);
 
             };
@@ -222,16 +234,16 @@ module.exports = function (grunt) {
                 var sourcedata = grunt.file.read(sourcedataurl);
                 var retinaCssCode = '';
                 var img;
-                retinaCssCode += '\n\n@media only screen and (-webkit-min-device-pixel-ratio: 1.5),only screen and (min--moz-device-pixel-ratio: 1.5),only screen and (min-resolution: 240dpi) {';
+                retinaCssCode += '\n\n@media only screen and (-webkit-min-device-pixel-ratio: 1.5),only screen and (min--moz-device-pixel-ratio: 1.5),only screen and (min-resolution: 240dpi) \n{';
                 for (var key in retinaSliceCode) {
                     img = retinaSliceCode[key].sprite;
                     retinaCssCode += retinaSliceCode[key].className;
                     retinaCssCode += '{background-image:url("../sprite/' + fileName + '@2x.png';
-                    if(options.imagestamp) retinaCssCode+="?"+grunt.template.today("yyyymmddHHmmss");
+                    if(options.imagestamp) retinaCssCode+="?"+timeNow;
                     retinaCssCode +='");';
                     retinaCssCode += 'background-position: -' + (img.x) / 2 + 'px -' + (img.y) / 2 + 'px;background-size:' + (retinaSpriteSize.width) / 2 + 'px;}';
                 }
-                retinaCssCode += '\n}';
+                retinaCssCode += '\n}\n';
                 sourcedata += retinaCssCode;
                 grunt.file.write(destCSS, sourcedata);
                 grunt.log.writelns(("Done! [Retina 2x] -> " + destCSS));
@@ -244,6 +256,21 @@ module.exports = function (grunt) {
 
 
         // Process starter
+
+        // 删掉之前生成的雪碧图
+        for(var key in this.files){
+            var file = this.files[key];
+            //log(file);
+            //log('file src'+file.src);
+            var spritePath = path.join(path.dirname(file.src),'..','sprite');
+
+            log('sprite path : ----- '+spritePath);
+            //if the sprite dir path is exists
+            if(grunt.file.exists(spritePath)) {
+                grunt.file.delete(spritePath);
+            }
+            break;
+        }
 
 
         grunt.util.async.forEachSeries(this.files, _spriteSmithWrapper, function (err) {

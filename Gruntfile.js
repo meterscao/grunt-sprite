@@ -35,10 +35,12 @@ module.exports = function(grunt) {
                   'engine': 'gm',
                   // 默认使用二叉树最优排列算法
                   'algorithm': 'binary-tree',
-                  // 默认给雪碧图追加时间戳
-                  'imagestamp':true,
-                  // 默认给样式文件追加时间戳
-                  'cssstamp':true
+                  // 给雪碧图追加时间戳，默认不追加
+                  'imagestamp':false,
+                  // 给样式文件追加时间戳，默认不追加
+                  'cssstamp':true,
+                  // 是否以时间戳为文件名生成新的雪碧图文件，默认不生成新文件
+                  'newsprite':true
 
               }
           }
