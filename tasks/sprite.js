@@ -56,7 +56,7 @@ module.exports = function (grunt) {
             // 获取slice部分的代码
             var getSliceList = function () {
 
-                var regex = new RegExp('background-image:[\\s]*url\\(["\']?(?!http[s]?|/)[^;]*?(slice[\\w\\d\\s!./\\-\\_@]*\\.[\\w?#]+)["\']?\\)[^;}]*;?', 'ig'),
+                var regex = new RegExp('background-image:[\\s]*url\\(["\']?(?!http[s]?|/)[^;]*?(slice/[\\w\\d\\s!./\\-\\_@]*\\.[\\w?#]+)["\']?\\)[^;}]*;?', 'ig'),
                     pathToResource;
 
                 // 获取整个样式
